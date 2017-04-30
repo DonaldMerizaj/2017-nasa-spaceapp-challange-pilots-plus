@@ -1,0 +1,103 @@
+{
+  "cities": [
+    {
+      "id": 0,
+      "cityName": "Tirana",
+      "latitude": 41.3311551,
+      "longtitude": 19.6777386,
+      "description": [
+        {
+          "general": "Tirana is the capital city of Albania. Positioned in the heart of Albania it's the largest city offering a variety of points of interests, cultural and historical spots. The city was established in 1614 by Sulejman Pasha Bargjini, a native feudal lord. On February 8, 1920 Tirana was made the temporary capital by the Congress of Lushnje, and it was proclaimed the permanent capital on December 31, 1925.",
+          "history": "The area occupied by Tirana has been populated since the Paleolithic era, dating back 10,000 to 30,000 years ago, as suggested by evidence from tools excavated near Mount Dajt's quarry and in Pellumba Cave. As argued by various archaeologists, Tirana and its suburbs are filled with Illyrian toponyms, as its precincts are some of the earliest inhabited regions in Albania. The oldest discovery in downtown Tirana was a Roman house, later transformed into an aisleless church with a mosaic-floor, dating to the 3rd century A.D., with other remains found near a medieval temple at Shengjin Fountain in the eastern suburbs. A castle possibly called Tirkan or Theranda, whose remnants are found along Murat Toptani Street, was built by Emperor Justinian in 520 A.D. and restored by Ahmed Pasha Toptani in the 18th century. The area had no special importance in Illyrian and classical times. In 1510, Marin Barleti, an Albanian Catholic priest and scholar, in the biography of the Albanian national hero Skanderbeg, Historia de vita et gestis Scanderbegi Epirotarum principis (The story of life and deeds of Skanderbeg, the prince of Epirotes), referred to this area as a small village.",
+          "geography": "",
+          "climate": "Tirana has a humid subtropical climate (Cfa), and receives just enough summer precipitation to avoid Köppen's (Csa) Mediterranean climate classification, since every summer month has more than 40 millimetres (1.6 in) of rainfall, with hot and moderately dry/humid summers and cool and wet winters. Some snow falls almost every winter, but it usually melts quickly. The city is ranked in the Top 10 of the sunniest cities in Europe with a total of 2544 hours of sun.",
+          "culture": " "
+        }
+      ],
+      "photoLinks": [
+        {
+          "id": 0,
+          "link": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/db/Tirana_Panorama_2017.jpg/640px-Tirana_Panorama_2017.jpg"
+        }
+
+      ]
+    },
+    {
+      "id": 1,
+      "cityName": "Podgorica",
+      "latitude": 42.4321689,
+      "longtitude": 19.1157944,
+      "description": [
+        {
+
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "cityName": "Sarajevo",
+      "latitude": 43.8938759,
+      "longtitude": 18.102806,
+      "description": [
+        {
+
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "cityName": "Budapest",
+      "latitude": 47.4807765,
+      "longtitude": 18.569875,
+      "description": [
+        {
+
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "cityName": "Vienna",
+      "latitude": 48.2202383,
+      "longtitude": 15.8196338,
+      "description": [
+        {
+
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "cityName": "Munich",
+      "latitude": 48.1550284,
+      "longtitude": 11.2616528,
+      "description": [
+        {
+
+        }
+      ]
+    },
+    {
+      "id": 6,
+      "cityName": "Frankfurt",
+      "latitude": 50.1213152,
+      "longtitude": 8.3563799,
+      "description": [
+        {
+
+        }
+      ]
+    },
+    {
+      "id": 7,
+      "cityName": "Amsterdam",
+      "latitude": 52.3746999,
+      "longtitude": 4.6184338,
+      "description": [
+        {
+
+        }
+      ]
+    }
+  ]
+}
