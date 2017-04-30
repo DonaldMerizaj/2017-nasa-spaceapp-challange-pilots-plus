@@ -167,7 +167,7 @@ public class FlightMapRouteActivity extends AppCompatActivity implements OnMapRe
                 .icon(BitmapDescriptorFactory.fromResource(R.mipmap.ic_plane_v3));
         mMap.addMarker(mCenter);
 
-        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(mCenter.getPosition(), 15.0f));
+        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(mCenter.getPosition(), 6.0f));
 
         checkHasDataForPlaceDownOfMe();
     }
