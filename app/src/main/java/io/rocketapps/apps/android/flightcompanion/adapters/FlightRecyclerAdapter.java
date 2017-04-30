@@ -8,10 +8,7 @@ import android.view.ViewGroup;
 
 import java.util.ArrayList;
 
-import io.realm.RealmObject;
-import io.realm.RealmResults;
 import io.rocketapps.apps.android.flightcompanion.R;
-import io.rocketapps.apps.android.flightcompanion.activities.SavedFlightsActivity;
 import io.rocketapps.apps.android.flightcompanion.model.RealmCustomObject;
 
 /**
@@ -38,6 +35,10 @@ public class FlightRecyclerAdapter extends RecyclerView.Adapter<FlightRecyclerVi
         switch (viewType) {
             case RealmCustomObject.SAVED_FLIGHT_LIST:
                 view = LayoutInflater.from(mContext).inflate(R.layout.item_recycle_saved_flight, parent, false);
+                break;
+            case RealmCustomObject.PLACES_LIST:
+                view = LayoutInflater.from(mContext).inflate(R.layout.item_recycle_flight_place, parent, false);
+                break;
         }
         return new FlightRecyclerViewHolder(view, viewType);
     }

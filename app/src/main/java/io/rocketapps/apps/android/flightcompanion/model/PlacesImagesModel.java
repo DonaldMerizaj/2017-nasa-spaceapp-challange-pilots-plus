@@ -13,6 +13,8 @@ public class PlacesImagesModel extends RealmObject {
     long id;
     String link;
     String title;
+    long created_at;
+
 
 
     public long getId() {
@@ -38,5 +40,13 @@ public class PlacesImagesModel extends RealmObject {
 
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    public long getCreated_at() {
+        return created_at;
+    }
+
+    public void setCreated_at(long created_at) {
+        this.created_at = created_at;
     }
 }

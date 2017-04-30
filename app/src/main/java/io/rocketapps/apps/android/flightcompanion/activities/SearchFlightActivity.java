@@ -1,7 +1,10 @@
 package io.rocketapps.apps.android.flightcompanion.activities;
 
+import android.app.ProgressDialog;
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -17,6 +20,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
+import android.widget.Toast;
 
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.NetworkResponse;
@@ -39,11 +43,15 @@ import com.google.android.gms.maps.model.Polygon;
 import com.google.android.gms.maps.model.PolygonOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
+import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Target;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
@@ -59,6 +67,7 @@ import io.rocketapps.apps.android.flightcompanion.model.PlacesDetailsModel;
 import io.rocketapps.apps.android.flightcompanion.model.PlacesImagesModel;
 import io.rocketapps.apps.android.flightcompanion.model.RealmController;
 import io.rocketapps.apps.android.flightcompanion.model.RequestVolley;
+import io.rocketapps.apps.android.flightcompanion.model.SuccessError;
 import io.rocketapps.apps.android.flightcompanion.model.Utils;
 import io.rocketapps.apps.android.flightcompanion.network.CustomStringRequest;
 import io.rocketapps.apps.android.flightcompanion.network.CustomVolleyRequestQueue;
@@ -82,6 +91,7 @@ public class SearchFlightActivity extends AppCompatActivity implements OnMapRead
     private Polyline mRouteFlight;
     private MarkerOptions mMarkerFrom, mMarkerTo;
     private Realm realm;
+    private ProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -329,7 +339,7 @@ public class SearchFlightActivity extends AppCompatActivity implements OnMapRead
                         MarkerOptions mCenter = new MarkerOptions().position(b.getCenter())
                                 .anchor(0.5f, 0.5f)
                                 .rotation((float) getBearing(mFrom, mTo))
-                                .icon(BitmapDescriptorFactory.fromResource(R.mipmap.ic_plane_white));
+                                .icon(BitmapDescriptorFactory.fromResource(R.mipmap.ic_plane_v3));
                         mMap.addMarker(mCenter);
 
 //                        mMap.animateCamera(CameraUpdateFactory.newLatLng(b.getCenter()));
@@ -431,6 +441,15 @@ public class SearchFlightActivity extends AppCompatActivity implements OnMapRead
 
         try {
 
+            progressDialog = new ProgressDialog(SearchFlightActivity.this);
+            progressDialog.setCancelable(true);
+            progressDialog.setTitle("Saving Flight");
+            progressDialog.setMessage("Please wait while flight is saved locally :)");
+
+            if(!progressDialog.isShowing())
+            {
+                progressDialog.show();
+            }
             String file = Utils.getJsonFile(getApplicationContext(), "places.json");
 
             JSONObject mObj = new JSONObject(file);
@@ -457,9 +476,11 @@ public class SearchFlightActivity extends AppCompatActivity implements OnMapRead
                 while (from < dist) {
                     LatLng nextPos = getDestinationPoint(mFrom, bearing, radiusInKM + from);
                     mPolygon.add(nextPos);
-//                    Utils.Log(TAG,"NextPos:"+nextPos.toString());
+                    Utils.Log(TAG,"NextPos:"+nextPos.toString());
                     from += 10;
                 }
+
+
 
                 mPolygon.add(mTo);
 //                mMap.clear();
@@ -512,6 +533,7 @@ public class SearchFlightActivity extends AppCompatActivity implements OnMapRead
                             flightPlacesModel.setLat(place.getDouble("latitude"));
                             flightPlacesModel.setLng(place.getDouble("longtitude"));
                             flightPlacesModel.setName(place.getString("cityName"));
+                            flightPlacesModel.setCreated_at(Calendar.getInstance().getTimeInMillis());
 
 
                             if(place.has("description")) {
@@ -531,6 +553,7 @@ public class SearchFlightActivity extends AppCompatActivity implements OnMapRead
                                     placesDetailsModel.setClimate(obj.getString("climate"));
                                     placesDetailsModel.setGeography(obj.getString("geography"));
                                     placesDetailsModel.setHistory(obj.getString("history"));
+                                    placesDetailsModel.setCreated_at(Calendar.getInstance().getTimeInMillis());
                                     placesDetials.add(placesDetailsModel);
                                 }
 
@@ -548,9 +571,23 @@ public class SearchFlightActivity extends AppCompatActivity implements OnMapRead
                                     JSONObject obj = images.getJSONObject(k);
                                     if (!obj.has("link"))
                                         continue;
-                                    PlacesImagesModel imagesModel = realm.createObject(PlacesImagesModel.class);
+                                    final PlacesImagesModel imagesModel = realm.createObject(PlacesImagesModel.class);
+
                                     imagesModel.setLink(obj.getString("link"));
+//                                    saveImage(obj.getString("link"), new SuccessError() {
+//                                        @Override
+//                                        public void onSuccess(String path) {
+//                                            imagesModel.setLink(path);
+//                                        }
+//
+//                                        @Override
+//                                        public void onError() {
+//
+//                                        }
+//                                    });
+
                                     imagesModel.setTitle(obj.getString("title"));
+                                    imagesModel.setCreated_at(Calendar.getInstance().getTimeInMillis());
                                     placesImage.add(imagesModel);
                                 }
                                 flightPlacesModel.setImages(placesImage);
@@ -575,12 +612,23 @@ public class SearchFlightActivity extends AppCompatActivity implements OnMapRead
 
                 Utils.Log(TAG, "END");
 
+                Toast.makeText(getApplicationContext(), "Flight is Saved successfully :).", Toast.LENGTH_SHORT).show();
+
+                progressDialog.dismiss();
+
             }
 
 
         } catch (Exception e) {
 
             realm.close();
+
+
+            progressDialog.dismiss();
+
+            Toast.makeText(getApplicationContext(), "Something went wrong while trying to save flight :(", Toast.LENGTH_SHORT).show();
+
+
 
 
             e.printStackTrace();
@@ -681,6 +729,56 @@ public class SearchFlightActivity extends AppCompatActivity implements OnMapRead
 
         mMap = googleMap;
         Log.d(TAG, "onMapReady()");
+
+    }
+
+
+    public void saveImage(String url, final SuccessError successError)
+    {
+        final String fileName = Calendar.getInstance().getTimeInMillis() + ".jpg";
+        File file = null;
+
+
+        File directory = getApplicationContext().getDir("imagesDire", Context.MODE_PRIVATE);
+
+
+        file = new File(directory,  fileName);
+        final File finalFile = file;
+        final File finalFile1 = file;
+        Target target = new Target() {
+
+            @Override
+            public void onPrepareLoad(Drawable arg0) {
+                return;
+            }
+
+            @Override
+            public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom arg1) {
+
+                try {
+
+
+                    finalFile.createNewFile();
+                    FileOutputStream ostream = new FileOutputStream(finalFile);
+                    bitmap.compress(Bitmap.CompressFormat.JPEG, 80, ostream);
+                    ostream.close();
+                    successError.onSuccess(finalFile1.getAbsolutePath());
+
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onBitmapFailed(Drawable arg0) {
+                return;
+            }
+        };
+
+        Picasso.with(getApplicationContext())
+                .load(url)
+                .into(target);
 
     }
 }

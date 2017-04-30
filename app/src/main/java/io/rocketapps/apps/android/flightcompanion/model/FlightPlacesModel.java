@@ -16,6 +16,15 @@ public class FlightPlacesModel extends RealmObject {
     double lat;
     double lng;
     String name;
+    long created_at;
+
+    public long getCreated_at() {
+        return created_at;
+    }
+
+    public void setCreated_at(long created_at) {
+        this.created_at = created_at;
+    }
 
     RealmList<PlacesDetailsModel> details;
     RealmList<PlacesImagesModel> images;

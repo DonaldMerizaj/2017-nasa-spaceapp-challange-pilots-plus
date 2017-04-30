@@ -7,6 +7,8 @@ import android.widget.TextView;
 
 import io.rocketapps.apps.android.flightcompanion.R;
 import io.rocketapps.apps.android.flightcompanion.model.FlightModel;
+import io.rocketapps.apps.android.flightcompanion.model.FlightPlacesModel;
+import io.rocketapps.apps.android.flightcompanion.model.PlacesDetailsModel;
 import io.rocketapps.apps.android.flightcompanion.model.RealmCustomObject;
 
 /**
@@ -20,6 +22,7 @@ public class FlightRecyclerViewHolder extends RecyclerView.ViewHolder {
     TextView txtTo;
     TextView txtFromIata;
     TextView txtToIata;
+    TextView txtPlace;
     RealmCustomObject mItem;
 
     public FlightRecyclerViewHolder(View itemView, int viewType) {
@@ -31,6 +34,9 @@ public class FlightRecyclerViewHolder extends RecyclerView.ViewHolder {
             txtTo = (TextView) itemView.findViewById(R.id.txt_to);
             txtFromIata = (TextView) itemView.findViewById(R.id.txt_from_iata);
             txtToIata = (TextView) itemView.findViewById(R.id.txt_to_iata);
+        }else if (viewType == RealmCustomObject.PLACES_LIST) {
+
+            txtPlace = (TextView) itemView.findViewById(R.id.txt_city);
         }
     }
 
@@ -48,6 +54,11 @@ public class FlightRecyclerViewHolder extends RecyclerView.ViewHolder {
             txtFromIata.setText(flight.getIata_from());
             txtToIata.setText(flight.getIata_to());
 
+        }else if(object.getViewType() == RealmCustomObject.PLACES_LIST)
+        {
+
+            FlightPlacesModel placesModel = (FlightPlacesModel) object.getObject();
+            txtPlace.setText(placesModel.getName());
         }
     }
 }

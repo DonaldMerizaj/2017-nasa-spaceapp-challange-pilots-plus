@@ -62,6 +62,10 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="io.rocketapps.apps.android.flightcompanion.activities.FlightDetailsActivity" />
         </activity>
+        <activity
+            android:name=".activities.PlaceDetailsActivity"
+            android:label="@string/title_activity_place_details"
+            android:theme="@style/AppTheme.NoAction"></activity>
     </application>
 
 </manifest>

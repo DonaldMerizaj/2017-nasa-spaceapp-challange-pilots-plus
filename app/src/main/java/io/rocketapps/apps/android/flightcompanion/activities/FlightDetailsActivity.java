@@ -3,19 +3,29 @@ package io.rocketapps.apps.android.flightcompanion.activities;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.TextView;
 
+import java.util.ArrayList;
+
 import io.realm.Realm;
 import io.rocketapps.apps.android.flightcompanion.R;
+import io.rocketapps.apps.android.flightcompanion.adapters.FlightRecyclerAdapter;
+import io.rocketapps.apps.android.flightcompanion.adapters.OnListFragmentInteractionListener;
 import io.rocketapps.apps.android.flightcompanion.model.FlightModel;
+import io.rocketapps.apps.android.flightcompanion.model.FlightPlacesModel;
+import io.rocketapps.apps.android.flightcompanion.model.PlacesDetailsModel;
 import io.rocketapps.apps.android.flightcompanion.model.RealmController;
+import io.rocketapps.apps.android.flightcompanion.model.RealmCustomObject;
+import io.rocketapps.apps.android.flightcompanion.model.Utils;
 
-public class FlightDetailsActivity extends AppCompatActivity {
+public class FlightDetailsActivity extends AppCompatActivity implements OnListFragmentInteractionListener{
 
+    private static final String TAG = "DETAILS";
     private long uniqueId;
     private Realm realm;
     private FlightModel mFlight;
@@ -30,6 +40,11 @@ public class FlightDetailsActivity extends AppCompatActivity {
     TextView txtFlightCityTo;
     TextView txtFlightIataTo;
 
+    RecyclerView mRecyclerView;
+    private FlightRecyclerAdapter mAdapter;
+
+    OnListFragmentInteractionListener mListener;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,6 +54,9 @@ public class FlightDetailsActivity extends AppCompatActivity {
         Realm.init(getApplicationContext());
         realm = Realm.getDefaultInstance();
         RealmController.with(this).refresh();
+
+        mListener = this;
+
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -81,6 +99,22 @@ public class FlightDetailsActivity extends AppCompatActivity {
         txtFlightAirportTo.setText(mFlight.getAirport_to());
         txtFlightCityTo.setText(mFlight.getCity_to());
         txtFlightIataTo.setText(mFlight.getCountry_to());
+
+
+        ArrayList<RealmCustomObject> mObjs = new ArrayList<>();
+        for(FlightPlacesModel fl : mFlight.getmPlaces())
+        {
+            mObjs.add(new RealmCustomObject()
+                    .setViewType(RealmCustomObject.PLACES_LIST)
+                    .setObject(fl)
+            );
+
+        }
+
+        mAdapter = new FlightRecyclerAdapter(mObjs, getApplicationContext(), mListener);
+        mRecyclerView.setAdapter(mAdapter);
+
+
     }
 
     private void initView() {
@@ -93,5 +127,27 @@ public class FlightDetailsActivity extends AppCompatActivity {
         txtFlightAirportTo = (TextView) findViewById(R.id.txt_airport_to);
         txtFlightCityTo = (TextView) findViewById(R.id.txt_city_to);
         txtFlightIataTo = (TextView) findViewById(R.id.txt_iata_to);
+
+
+
+        mRecyclerView = (RecyclerView) findViewById(R.id.mRecycler);
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
+        mRecyclerView.setNestedScrollingEnabled(true);
+
+
+
+
+
+    }
+
+    @Override
+    public void onListFragmentInteraction(RealmCustomObject item) {
+
+        FlightPlacesModel flight = (FlightPlacesModel) item.getObject();
+        Utils.Log(TAG, "item:"+flight.getId());
+        Intent i = new Intent(getApplicationContext(), PlaceDetailsActivity.class);
+        i.putExtra("object_id", flight.getCreated_at());
+        startActivity(i);
+
     }
 }

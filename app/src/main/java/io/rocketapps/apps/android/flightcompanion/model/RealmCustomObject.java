@@ -9,6 +9,7 @@ import io.realm.RealmObject;
 public class RealmCustomObject {
 
     public static final int SAVED_FLIGHT_LIST = 1;
+    public static final int PLACES_LIST = 2;
 
     int viewType;
     RealmObject object;

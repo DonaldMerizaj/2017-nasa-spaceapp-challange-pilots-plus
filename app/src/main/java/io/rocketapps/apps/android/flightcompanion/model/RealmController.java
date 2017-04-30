@@ -69,4 +69,10 @@ public class RealmController {
     public FlightModel getSingleObject(long id) {
         return realm.where(FlightModel.class).equalTo("created_at", id).findFirst();
     }
+    public FlightPlacesModel getSingleObjectPlace(long id) {
+        return realm.where(FlightPlacesModel.class).equalTo("created_at", id).findFirst();
+    }
+    public PlacesDetailsModel getSingleObjectPlaceDetails(long id) {
+        return realm.where(PlacesDetailsModel.class).equalTo("created_at", id).findFirst();
+    }
 }
