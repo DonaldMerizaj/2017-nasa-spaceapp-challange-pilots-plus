@@ -33,7 +33,7 @@
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="@string/google_maps_key" />
+            android:value="@string/google_maps_key_v12321" />
 
         <activity
             android:name=".activities.SavedFlightsActivity"
@@ -49,9 +49,18 @@
             android:label="@string/title_activity_flight_details"
             android:parentActivityName=".activities.SavedFlightsActivity"
             android:theme="@style/AppTheme.NoAction">
-        <meta-data
-            android:name="android.support.PARENT_ACTIVITY"
-            android:value="io.rocketapps.apps.android.flightcompanion.activities.SavedFlightsActivity" />
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="io.rocketapps.apps.android.flightcompanion.activities.SavedFlightsActivity" />
+        </activity>
+        <activity
+            android:name=".activities.FlightMapRouteActivity"
+            android:label="@string/title_activity_flight_map_route"
+            android:parentActivityName=".activities.FlightDetailsActivity"
+            android:theme="@style/AppTheme.NoAction">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="io.rocketapps.apps.android.flightcompanion.activities.FlightDetailsActivity" />
         </activity>
     </application>
 

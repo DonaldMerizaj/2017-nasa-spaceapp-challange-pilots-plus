@@ -12,6 +12,7 @@ public class PlacesImagesModel extends RealmObject {
     @Index
     long id;
     String link;
+    String title;
 
 
     public long getId() {
@@ -28,5 +29,14 @@ public class PlacesImagesModel extends RealmObject {
 
     public void setLink(String link) {
         this.link = link;
+    }
+
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
     }
 }

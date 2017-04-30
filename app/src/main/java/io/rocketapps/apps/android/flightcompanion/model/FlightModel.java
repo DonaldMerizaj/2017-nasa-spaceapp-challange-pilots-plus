@@ -2,6 +2,7 @@ package io.rocketapps.apps.android.flightcompanion.model;
 
 import android.util.Log;
 
+import java.util.Calendar;
 import java.util.Random;
 
 import io.realm.Realm;
@@ -16,7 +17,7 @@ import io.realm.annotations.PrimaryKey;
 
 public class FlightModel extends RealmObject {
 
-    @PrimaryKey
+    @Index
     private long id;
     double latFrom;
     double lngFrom;
@@ -34,14 +35,7 @@ public class FlightModel extends RealmObject {
 
     RealmList<FlightPlacesModel> mPlaces;
 
-    public FlightModel(){
-        Realm realm = Realm.getDefaultInstance();
-        if (realm.where(FlightModel.class).max("id") == null) {
-            this.id = 1;
-        } else {
-            this.id =  (realm.where(FlightModel.class).max("id").intValue()+1);
-        }
-    }
+
 
 
     public long getId() {

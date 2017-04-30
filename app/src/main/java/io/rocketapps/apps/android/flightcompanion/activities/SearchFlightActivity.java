@@ -328,8 +328,8 @@ public class SearchFlightActivity extends AppCompatActivity implements OnMapRead
 
                         MarkerOptions mCenter = new MarkerOptions().position(b.getCenter())
                                 .anchor(0.5f, 0.5f)
-//                                .rotation(45F)
-                                .icon(BitmapDescriptorFactory.fromResource(R.mipmap.ic_plane));
+                                .rotation((float) getBearing(mFrom, mTo))
+                                .icon(BitmapDescriptorFactory.fromResource(R.mipmap.ic_plane_white));
                         mMap.addMarker(mCenter);
 
 //                        mMap.animateCamera(CameraUpdateFactory.newLatLng(b.getCenter()));
@@ -475,7 +475,7 @@ public class SearchFlightActivity extends AppCompatActivity implements OnMapRead
 
                 //region save flight
                 realm.beginTransaction();
-                FlightModel flightModel = realm.createObject(FlightModel.class, new FlightModel());
+                FlightModel flightModel = realm.createObject(FlightModel.class);
                 flightModel.setAirport_from(mSelectedFrom.getString("name"));
                 flightModel.setLatFrom(mSelectedFrom.getDouble("y"));
                 flightModel.setLngFrom(mSelectedFrom.getDouble("x"));
@@ -514,48 +514,48 @@ public class SearchFlightActivity extends AppCompatActivity implements OnMapRead
                             flightPlacesModel.setName(place.getString("cityName"));
 
 
-                            if(!place.has("description"))
-                                continue;
+                            if(place.has("description")) {
 
-                            JSONArray details = place.getJSONArray("description");
 
-                            RealmList<PlacesDetailsModel> placesDetials = new RealmList<>();
+                                JSONArray details = place.getJSONArray("description");
 
-                            for (int k = 0; k < details.length(); k++)
-                            {
-                                JSONObject obj = details.getJSONObject(k);
-                                if(!obj.has("general"))
-                                    continue;
-                                PlacesDetailsModel placesDetailsModel = realm.createObject(PlacesDetailsModel.class);
-                                placesDetailsModel.setGeneral(obj.getString("general"));
-                                placesDetailsModel.setCulture(obj.getString("culture"));
-                                placesDetailsModel.setClimate(obj.getString("climate"));
-                                placesDetailsModel.setGeography(obj.getString("geography"));
-                                placesDetailsModel.setHistory(obj.getString("history"));
-                                placesDetials.add(placesDetailsModel);
+                                RealmList<PlacesDetailsModel> placesDetials = new RealmList<>();
+
+                                for (int k = 0; k < details.length(); k++) {
+                                    JSONObject obj = details.getJSONObject(k);
+                                    if (!obj.has("general"))
+                                        continue;
+                                    PlacesDetailsModel placesDetailsModel = realm.createObject(PlacesDetailsModel.class);
+                                    placesDetailsModel.setGeneral(obj.getString("general"));
+                                    placesDetailsModel.setCulture(obj.getString("culture"));
+                                    placesDetailsModel.setClimate(obj.getString("climate"));
+                                    placesDetailsModel.setGeography(obj.getString("geography"));
+                                    placesDetailsModel.setHistory(obj.getString("history"));
+                                    placesDetials.add(placesDetailsModel);
+                                }
+
+                                flightPlacesModel.setDetails(placesDetials);
                             }
 
-                            flightPlacesModel.setDetails(placesDetials);
+                            if(place.has("photoLinks")) {
 
-                            if(!place.has("photoLinks"))
-                                continue;
+                                RealmList<PlacesImagesModel> placesImage = new RealmList<>();
 
-                            RealmList<PlacesImagesModel> placesImage = new RealmList<>();
-
-                            JSONArray images = place.getJSONArray("photoLinks");
+                                JSONArray images = place.getJSONArray("photoLinks");
 
 
-                            for (int k = 0; k < images.length(); k++)
-                            {
-                                JSONObject obj = images.getJSONObject(k);
-                                if(!obj.has("link"))
-                                    continue;
-                                PlacesImagesModel imagesModel = realm.createObject(PlacesImagesModel.class);
-                                imagesModel.setLink(obj.getString("link"));
-                                placesImage.add(imagesModel);
+                                for (int k = 0; k < images.length(); k++) {
+                                    JSONObject obj = images.getJSONObject(k);
+                                    if (!obj.has("link"))
+                                        continue;
+                                    PlacesImagesModel imagesModel = realm.createObject(PlacesImagesModel.class);
+                                    imagesModel.setLink(obj.getString("link"));
+                                    imagesModel.setTitle(obj.getString("title"));
+                                    placesImage.add(imagesModel);
+                                }
+                                flightPlacesModel.setImages(placesImage);
                             }
 
-                            flightPlacesModel.setImages(placesImage);
 
 
                             placesModels.add(flightPlacesModel);
@@ -579,6 +579,8 @@ public class SearchFlightActivity extends AppCompatActivity implements OnMapRead
 
 
         } catch (Exception e) {
+
+            realm.close();
 
 
             e.printStackTrace();

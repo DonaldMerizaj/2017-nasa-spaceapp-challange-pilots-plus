@@ -65,4 +65,8 @@ public class RealmController {
     public RealmResults<FlightModel> getFlights() {
         return realm.where(FlightModel.class).findAllSorted("created_at", Sort.DESCENDING);
     }
+
+    public FlightModel getSingleObject(long id) {
+        return realm.where(FlightModel.class).equalTo("created_at", id).findFirst();
+    }
 }

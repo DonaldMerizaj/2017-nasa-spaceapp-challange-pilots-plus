@@ -95,7 +95,7 @@ public class SavedFlightsActivity extends AppCompatActivity implements OnListFra
         FlightModel flight = (FlightModel) item.getObject();
         Utils.Log(TAG, "item:"+flight.getId());
         Intent i = new Intent(getApplicationContext(), FlightDetailsActivity.class);
-        i.putExtra("object_id", flight.getId());
+        i.putExtra("object_id", flight.getCreated_at());
         startActivity(i);
     }
 
