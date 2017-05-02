@@ -3,4 +3,6 @@
 
 # Android Application
 ## Flight Companion
-Flight Companion is an android app that will show you while you flight whats is under your kneth
+Flight Companion is an android app that will show you while you flight whats is underneath 
+
+Check our team and the solution i gave: https://2017.spaceappschallenge.org/challenges/earth-and-us/pilots-plus/teams/flight-companion/stream
